@@ -2,6 +2,7 @@
 import { Suspense } from "react";
 import "./globals.css";
 import Toast from "@/components/Toaster";
+import Navbar from "@/components/Navbar";
 
 export const metadata = {
   title: "FALCON- an e-Commerce platform",
@@ -11,11 +12,11 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body
-        className="antialiased"
-      >
+      <body className="antialiased">
         <Suspense>
-          <Toast/>
+          <Toast />
+          {/* Navbar */}
+          <Navbar />
           {children}
         </Suspense>
       </body>
