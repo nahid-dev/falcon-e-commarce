@@ -3,15 +3,19 @@ import Image from "next/image";
 import React from "react";
 import TextInputField from "./input/TextInputField";
 import SubNavbar from "./SubNavbar";
+import Link from "next/link";
 
 const Navbar = () => {
   return (
     <div>
       {/* Main Navbar */}
-      <nav className="bg-slate-800 text-white py-4 px-2 md:px-4">
+      <nav className="bg-[#0F172A] text-white py-4 px-2 md:px-4">
         <div className="custom-container flex items-center justify-between gap-1 md:gap-0 w-full">
           {/* Logo Section */}
-          <h1 className="text-lg sm:text-2xl font-bold leading-normal">
+          <Link
+            href="/"
+            className="text-lg sm:text-2xl font-bold leading-normal"
+          >
             <span>
               <Image
                 src="/logo/logo.png"
@@ -22,7 +26,7 @@ const Navbar = () => {
               />
             </span>{" "}
             <span className="hidden md:inline-block">FALCON</span>
-          </h1>
+          </Link>
           {/* Search Bar */}
           <div className="w-full md:w-1/2 flex items-center">
             <TextInputField
@@ -35,13 +39,13 @@ const Navbar = () => {
           </div>
           {/* User & Carts */}
           <div className="flex items-center space-x-6">
-            <div className="relative">
+            <div className="relative cursor-pointer">
               <ShoppingCart className="h-5 w-5 sm:h-6 sm:w-6" />
               <span className="absolute -top-2 -right-2 bg-red-500 text-xs rounded-full h-4 w-4 sm:h-5 sm:w-5 flex items-center justify-center">
                 3
               </span>
             </div>
-            <div className="hidden md:block">
+            <div className="hidden md:block cursor-pointer">
               <User className="h-5 w-5 sm:h-6 sm:w-6" />
             </div>
           </div>

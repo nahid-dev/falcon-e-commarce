@@ -1,12 +1,13 @@
-
 import { Suspense } from "react";
 import "./globals.css";
 import Toast from "@/components/Toaster";
 import Navbar from "@/components/Navbar";
+import Footer from "@/components/footer/Footer";
 
 export const metadata = {
   title: "FALCON- an e-Commerce platform",
-  description: "FALCON is an e-Commerce platform built with Next.js, and Tailwind CSS.",
+  description:
+    "FALCON is an e-Commerce platform built with Next.js, and Tailwind CSS.",
 };
 
 export default function RootLayout({ children }) {
@@ -18,6 +19,7 @@ export default function RootLayout({ children }) {
           {/* Navbar */}
           <Navbar />
           {children}
+          <Footer />
         </Suspense>
       </body>
     </html>
