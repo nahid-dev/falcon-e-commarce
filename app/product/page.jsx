@@ -38,7 +38,7 @@ const Product = () => {
   };
     return (
       <div>
-        <div className="min-h-screen bg-gray-50">
+        <div className="min-h-screen">
           {/* Breadcrumb */}
           <div className="container mx-auto px-4 py-2 sm:py-3 text-xs sm:text-sm text-gray-600">
             Home / Tops / T-Shirts
