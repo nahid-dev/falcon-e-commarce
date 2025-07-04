@@ -1,4 +1,5 @@
 import Breadcrumb from "@/components/Breadcrumb";
+import TextInputField from "@/components/input/TextInputField";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ChevronRight, Minus, Plus, Store, Trash2 } from "lucide-react";
@@ -121,7 +122,52 @@ const MyCart = () => {
           </div>
         </div>
         {/* LEFT SIDE */}
-        <div className="border col-span-3 md:col-span-1">SIDE BAR</div>
+        <div className="col-span-3 md:col-span-1">
+          <div className=" bg-white rounded-lg p-5 shadow flex flex-col gap-5">
+            <h2 className="text-2xl font-medium">Order Summary</h2>
+            <p className="flex items-center justify-between">
+              <span className="font-medium">Price (3 items)</span>{" "}
+              <span>৳00</span>
+            </p>
+            <p className="flex items-center justify-between">
+              <span className="font-medium">Shipping Fee</span>
+              <span className="text-blue-600 text-sm">To be added</span>
+            </p>
+            <div className="flex">
+              <TextInputField
+                placeholder="Store/Falcon capone"
+                className="rounded-r-none"
+              />
+              <Button
+                className="rounded-l-none bg-emerald-500 
+             hover:bg-emerald-600 block h-full py-[11px] text-base"
+              >
+                Apply
+              </Button>
+            </div>
+            <p className="flex items-center justify-between">
+              <span className="text-lg font-medium">Sub Total</span>{" "}
+              <span className="text-xl text-black">৳00</span>
+            </p>
+            <div>
+              <Button className="bg-emerald-500 text-white hover:bg-emerald-600 w-full text-base">
+                Proceed to Checkout
+              </Button>
+            </div>
+          </div>
+          <div className="flex gap-5 mt-5">
+            <div>
+              <Checkbox id="agree" />
+            </div>
+            <label
+              htmlFor="agree"
+              className="cursor-pointer hover:text-neutral-800"
+            >
+              I have read and agree to the Terms and Conditions, Privacy Policy
+              and Refund and Return Policy
+            </label>
+          </div>
+        </div>
       </div>
     </div>
   );
