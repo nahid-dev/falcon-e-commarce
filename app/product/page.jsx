@@ -39,7 +39,7 @@ const Product = () => {
 
   const breadCrumbContent = [
     {
-      title: "Homes",
+      title: "Home",
       url: "/",
     },
     {

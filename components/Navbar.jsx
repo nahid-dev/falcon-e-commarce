@@ -39,12 +39,12 @@ const Navbar = () => {
           </div>
           {/* User & Carts */}
           <div className="flex items-center space-x-6">
-            <div className="relative cursor-pointer">
+            <Link href="/my-cart" className="relative">
               <ShoppingCart className="h-5 w-5 sm:h-6 sm:w-6" />
               <span className="absolute -top-2 -right-2 bg-red-500 text-xs rounded-full h-4 w-4 sm:h-5 sm:w-5 flex items-center justify-center">
                 3
               </span>
-            </div>
+            </Link>
             <div className="hidden md:block cursor-pointer">
               <User className="h-5 w-5 sm:h-6 sm:w-6" />
             </div>

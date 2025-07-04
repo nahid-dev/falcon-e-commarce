@@ -6,9 +6,9 @@ const ProductDescription = ({ description, specifications }) => {
   const [showMoreSpecs, setShowMoreSpecs] = useState(false);
 
   return (
-    <div className="space-y-6 sm:space-y-8 bg-white rounded-md shadow p-5">
+    <div className="space-y-6 sm:space-y-8">
       {/* Description */}
-      <div>
+      <div className="bg-white p-5 rounded-md shadow-md">
         <h2 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4">
           Description
         </h2>
@@ -29,7 +29,7 @@ const ProductDescription = ({ description, specifications }) => {
       </div>
 
       {/* Specifications */}
-      <div>
+      <div className="bg-white p-5 rounded-md shadow-md">
         <h2 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4">
           Specification
         </h2>
