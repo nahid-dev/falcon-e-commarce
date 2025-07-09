@@ -1,25 +1,20 @@
+const { client } = require("./HTTPKit");
+
 const APIKit = {
   public: {
     getProducts: () => {
-      const url =
-        process.env.NODE_ENV === "development"
-          ? "/shop/products"
-          : "?endpoint=shop/products";
+      const url = "/shop/products";
       return client.get(url);
     },
     getProductDetails: (slug) => {
-      const url =
-        process.env.NODE_ENV === "development"
-          ? `/product/${slug}`
-          : `?endpoint=product/${slug}`;
+      const url = `/product/${slug}`;
       return client.get(url);
     },
     getCategories: () => {
-      const url =
-        process.env.NODE_ENV === "development"
-          ? "/categories"
-          : "?endpoint=categories";
+      const url = "/categories";
       return client.get(url);
     },
   },
 };
+
+export default APIKit;
