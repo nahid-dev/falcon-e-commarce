@@ -1,12 +1,16 @@
+"use client";
 import Breadcrumb from "@/components/Breadcrumb";
 import TextInputField from "@/components/input/TextInputField";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
+import { ProductsContext } from "@/context";
 import { ChevronRight, Minus, Plus, Store, Trash2 } from "lucide-react";
 import Image from "next/image";
-import React from "react";
+import React, { useContext } from "react";
 
 const MyCart = () => {
+  const { cartItems, setCartItems, products } = useContext(ProductsContext);
+  console.log(cartItems);
   const breadcrumbItems = [
     { title: "Home", url: "/" },
     { title: "My Cart", url: "/my-cart" },

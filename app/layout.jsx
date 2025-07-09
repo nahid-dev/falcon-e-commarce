@@ -3,6 +3,8 @@ import "./globals.css";
 import Toast from "@/components/Toaster";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/footer/Footer";
+import ProductsProvider from "@/provider/ProductsProvider";
+import TanstackProvider from "@/components/providers/TanstackProvider";
 
 export const metadata = {
   title: "FALCON- an e-Commerce platform",
@@ -16,10 +18,13 @@ export default function RootLayout({ children }) {
       <body className="antialiased bg-gray-50">
         <Suspense>
           <Toast />
-          {/* Navbar */}
-          <Navbar />
-          {children}
-          <Footer />
+          <TanstackProvider>
+            <ProductsProvider>
+              <Navbar />
+              {children}
+              <Footer />
+            </ProductsProvider>
+          </TanstackProvider>
         </Suspense>
       </body>
     </html>

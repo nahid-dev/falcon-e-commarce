@@ -1,7 +1,8 @@
 "use client";
+import { ProductsContext } from "@/context";
 import { Headset, Menu, Package, Store, X } from "lucide-react";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 
 const contactsInfo = [
   {
@@ -21,31 +22,9 @@ const contactsInfo = [
   },
 ];
 
-const categories = [
-  {
-    name: "Fashion",
-    href: "/category/fashion",
-    icon: "👗",
-  },
-  {
-    name: "Electronics",
-    href: "/category/electronics",
-    icon: "📱",
-  },
-  {
-    name: "Home & Kitchen",
-    href: "/category/home-kitchen",
-    icon: "🏠",
-  },
-  {
-    name: "Sports & Outdoors",
-    href: "/category/sports-outdoors",
-    icon: "⚽",
-  },
-];
-
 const SubNavbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { categories } = useContext(ProductsContext);
 
   return (
     <div className="bg-white shadow-lg w-full px-2 md:px-4">
@@ -66,14 +45,14 @@ const SubNavbar = () => {
           </button>
 
           {/* Desktop categories */}
-          <div className="hidden md:flex items-center gap-2">
+          <div className="hidden md:flex items-center gap-2 ">
             <Menu className="text-emerald-500 size-6" />
             <p className="font-medium text-neutral-600">Categories</p>
-            <div className="flex items-center gap-4 pl-5">
-              {categories.map((category, index) => (
-                <Link href={category.href} key={index}>
-                  <span className="text-sm text-neutral-600 hover:text-neutral-800">
-                    {category.name}
+            <div className="flex items-center gap-4 pl-5 overflow-hidden ">
+              {categories?.slice(0, 4)?.map((category, index) => (
+                <Link href={category?.slug} key={index}>
+                  <span className="text-sm text-neutral-600 hover:text-neutral-800 text-nowrap">
+                    {category?.name || ""}
                   </span>
                 </Link>
               ))}
@@ -104,10 +83,10 @@ const SubNavbar = () => {
             <div>
               <p className="font-semibold text-gray-700 mb-2">Categories</p>
               <div className="flex flex-col gap-2">
-                {categories.map((category, index) => (
-                  <Link href={category.href} key={index}>
+                {categories?.map((category, index) => (
+                  <Link href={category.slug} key={index}>
                     <span className="text-sm text-neutral-600 hover:text-neutral-800">
-                      {category.icon} {category.name}
+                      {category?.name || ""}
                     </span>
                   </Link>
                 ))}

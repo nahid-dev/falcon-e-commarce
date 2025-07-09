@@ -3,8 +3,10 @@ import { Star, Heart, Share2 } from 'lucide-react';
 const ProductInfo = ({ name, price, originalPrice, rating, reviewCount }) => {
   return (
     <div className="space-y-3 sm:space-y-4">
-      <h1 className="text-lg sm:text-xl lg:text-2xl font-semibold text-gray-900 leading-tight">{name}</h1>
-      
+      <h1 className="text-lg sm:text-xl lg:text-2xl font-semibold text-gray-900 leading-tight">
+        {name || "N/A"}
+      </h1>
+
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div className="flex items-center space-x-2">
           <div className="flex items-center">
@@ -14,12 +16,16 @@ const ProductInfo = ({ name, price, originalPrice, rating, reviewCount }) => {
                 <Star
                   key={i}
                   className={`h-3 w-3 sm:h-4 sm:w-4 ${
-                    i < Math.floor(rating) ? 'text-yellow-400 fill-current' : 'text-gray-300'
+                    i < Math.floor(rating)
+                      ? "text-yellow-400 fill-current"
+                      : "text-gray-300"
                   }`}
                 />
               ))}
             </div>
-            <span className="ml-2 text-xs sm:text-sm text-gray-600">({reviewCount.toLocaleString()})</span>
+            <span className="ml-2 text-xs sm:text-sm text-gray-600">
+              ({reviewCount.toLocaleString()})
+            </span>
           </div>
         </div>
         <div className="flex space-x-2">
@@ -33,12 +39,12 @@ const ProductInfo = ({ name, price, originalPrice, rating, reviewCount }) => {
       </div>
 
       <div className="flex items-center space-x-2">
-        <span className="text-xl sm:text-2xl font-bold text-emerald-600">৳{price.toFixed(2)}</span>
-        <span className="text-base sm:text-lg text-gray-500 line-through">৳{originalPrice}</span>
-      </div>
-
-      <div className="bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-xs sm:text-sm inline-block">
-        Promotion: Min. spend ৳550
+        <span className="text-xl sm:text-2xl font-bold text-emerald-600">
+          ৳{price}
+        </span>
+        <span className="text-base sm:text-lg text-gray-500 line-through">
+          ৳{originalPrice}
+        </span>
       </div>
     </div>
   );

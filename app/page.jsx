@@ -1,22 +1,27 @@
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
+"use client";
+import ProductCard from "@/components/product/ProductCard";
+import { useContext } from "react";
+import { ProductsContext } from "@/context";
 
 export default function Home() {
+  const { products } = useContext(ProductsContext);
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">
-          Welcome to Falcon E-Commerce
-        </h1>
-        <p className="text-xl text-muted-foreground mb-8">
-          Your one-stop shop for fashion and electronics!
-        </p>
-        <Link href="/product">
-          <Button className="bg-emerald-500 hover:bg-emerald-600">
-            View Product Example
-          </Button>
-        </Link>
+    <div className="min-h-screen flex items-center justify-center custom-container py-8">
+      <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        {products.map((product) => (
+          <ProductCard key={product?.id} product={product} />
+        ))}
       </div>
+
+      {/* Empty State */}
+      {products.length === 0 && (
+        <div className="text-center py-12">
+          <div className="text-gray-400 text-lg mb-2">No products found</div>
+          <div className="text-gray-500">
+            Try adjusting your search or filters
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -1,11 +1,18 @@
-import { Search, ShoppingCart, User } from "lucide-react";
+"use client";
+import { useContext } from "react";
+import { Search } from "lucide-react";
 import Image from "next/image";
-import React from "react";
 import TextInputField from "./input/TextInputField";
 import SubNavbar from "./SubNavbar";
 import Link from "next/link";
+import dynamic from "next/dynamic";
+import { ProductsContext } from "@/context";
+const UserAndCartSection = dynamic(() => import("./UserAndCartSection"), {
+  ssr: false,
+});
 
 const Navbar = () => {
+  const { cartItems } = useContext(ProductsContext);
   return (
     <div>
       {/* Main Navbar */}
@@ -38,17 +45,7 @@ const Navbar = () => {
             </div>
           </div>
           {/* User & Carts */}
-          <div className="flex items-center space-x-6">
-            <Link href="/my-cart" className="relative">
-              <ShoppingCart className="h-5 w-5 sm:h-6 sm:w-6" />
-              <span className="absolute -top-2 -right-2 bg-red-500 text-xs rounded-full h-4 w-4 sm:h-5 sm:w-5 flex items-center justify-center">
-                3
-              </span>
-            </Link>
-            <div className="hidden md:block cursor-pointer">
-              <User className="h-5 w-5 sm:h-6 sm:w-6" />
-            </div>
-          </div>
+          <UserAndCartSection cartItems={cartItems} />
         </div>
       </nav>
       {/* Sub-Navbar */}

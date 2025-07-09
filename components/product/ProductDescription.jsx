@@ -13,7 +13,7 @@ const ProductDescription = ({ description, specifications }) => {
           Description
         </h2>
         <div className="text-gray-700 leading-relaxed text-sm sm:text-base">
-          <p>{description}</p>
+          <div dangerouslySetInnerHTML={{ __html: description }} />
           <div className="flex justify-center">
             {!showMoreDescription && (
               <button
