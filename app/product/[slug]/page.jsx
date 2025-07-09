@@ -7,6 +7,7 @@ import ProductImageGallery from "@/components/product/ProductImageGallery";
 import ProductInfo from "@/components/product/ProductInfo";
 import ProductOptions from "@/components/product/ProductOptions";
 import { Button } from "@/components/ui/button";
+import { product } from "@/constants/options";
 import { ProductsContext } from "@/context";
 import { useQuery } from "@tanstack/react-query";
 import React, { useContext, useState } from "react";
@@ -17,35 +18,14 @@ const ProductDetails = ({ params }) => {
   const [selectedSize, setSelectedSize] = useState("XS");
   const [selectedColor, setSelectedColor] = useState("Navy Blue");
   const [quantity, setQuantity] = useState(1);
-  const { cartItems, setCartItems } = useContext(ProductsContext)
+  const { cartItems, setCartItems } = useContext(ProductsContext);
   // GET PRODUCT DETAILS
   const { data: productDetails, isLoading } = useQuery({
     queryKey: ["/products/:slug"],
     queryFn: () =>
       APIKit.public.getProductDetails(slug).then(({ data }) => data?.data),
   });
-  // console.log(productDetails);
-
-  const product = {
-    id: 1,
-    name: "Men's Stylish & Fashionable Trendy Good Looking Long Sleeve Casual Shirt.",
-    price: 1139.33,
-    originalPrice: 1500,
-    rating: 4.7,
-    reviewCount: 2254,
-    colors: ["Navy Blue", "Maroon", "Blue", "Black"],
-    sizes: ["XL", "XS", "S", "M", "L"],
-    images: ["/lovable-uploads/45612171-f29f-4124-a9ef-04c716806575.png"],
-    description:
-      "Just as a book is judged by its cover, the first thing you notice when you pick up a modern smartphone is the display. Nothing surprising, because advanced technologies allow you to practically level the display frames and cutouts for the front camera and speaker, leaving no room for bold design solutions. And how good that in such realities Apple everything is fine with displays.",
-    specifications: [
-      "GMP Cosmetic Good Manufacturing Practice",
-      "Cruelty Free",
-      "No Animal Testing",
-      "Zenpia Global Standard",
-      "Comply with Global Standard",
-    ],
-  };
+  console.log(productDetails);
 
   const breadCrumbContent = [
     {
@@ -62,33 +42,32 @@ const ProductDetails = ({ params }) => {
     },
   ];
 
-  const handleAddToCart = (productId) => {
-  if (typeof window === "undefined") return;
+  const handleAddToCart = (product) => {
+    if (typeof window === "undefined") return;
 
-  const newCartItem = {
-    id: productId,
-    color: selectedColor,
-    size: selectedSize,
-    quantity,
+    const newCartItem = {
+      product,
+      color: selectedColor,
+      size: selectedSize,
+      quantity,
+    };
+    const items = JSON.parse(localStorage.getItem("cartItems")) || [];
+    const existingItemIndex = items.findIndex(
+      (item) =>
+        item.product.id === product.id &&
+        item.color === selectedColor &&
+        item.size === selectedSize
+    );
+
+    if (existingItemIndex !== -1) {
+      items[existingItemIndex].quantity += quantity;
+      toast.success("Product quantity updated in cart!");
+    } else {
+      items.push(newCartItem);
+      toast.success("Product added to cart!");
+    }
+    setCartItems(items); // This updates context and localStorage
   };
-  const items = JSON.parse(localStorage.getItem("cartItems")) || [];
-  const existingItemIndex = items.findIndex(
-    (item) =>
-      item.id === productId &&
-      item.color === selectedColor &&
-      item.size === selectedSize
-  );
-
-  if (existingItemIndex !== -1) {
-    items[existingItemIndex].quantity += quantity;
-    toast.success("Product quantity updated in cart!");
-  } else {
-    items.push(newCartItem);
-    toast.success("Product added to cart!");
-  }
-  setCartItems(items); // This updates context and localStorage
-};
-    
 
   if (isLoading) {
     return "Loading...";
@@ -131,7 +110,7 @@ const ProductDetails = ({ params }) => {
               />
 
               <Button
-                onClick={() => handleAddToCart(productDetails?.id)}
+                onClick={() => handleAddToCart(productDetails)}
                 className="w-full bg-emerald-500 hover:bg-emerald-600 text-white py-3 mt-4 sm:mt-6"
               >
                 Add to Cart
@@ -140,7 +119,7 @@ const ProductDetails = ({ params }) => {
 
             {/* Delivery Options */}
             <div className="lg:col-span-1 order-3">
-              <DeliveryOptions product={ productDetails} />
+              <DeliveryOptions product={productDetails} />
             </div>
           </div>
 

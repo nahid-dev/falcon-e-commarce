@@ -1,33 +1,92 @@
 "use client";
 import Breadcrumb from "@/components/Breadcrumb";
-import TextInputField from "@/components/input/TextInputField";
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import { ProductsContext } from "@/context";
-import { ChevronRight, Minus, Plus, Store, Trash2 } from "lucide-react";
-import Image from "next/image";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
+import toast from "react-hot-toast";
+import { Checkbox } from "@/components/ui/checkbox";
+import CartCategoryGroup from "@/components/product/cart/CartCategoryGroup";
+import CartSummary from "@/components/product/cart/CartSummary";
+import AgreementCheckbox from "@/components/product/cart/AgreementCheckbox";
+
+const breadcrumbItems = [
+  { title: "Home", url: "/" },
+  { title: "My Cart", url: "/my-cart" },
+];
 
 const MyCart = () => {
-  const { cartItems, setCartItems, products } = useContext(ProductsContext);
-  console.log(cartItems);
-  const breadcrumbItems = [
-    { title: "Home", url: "/" },
-    { title: "My Cart", url: "/my-cart" },
-  ];
+  const { cartItems, setCartItems, categories } = useContext(ProductsContext);
+  const [agreed, setAgreed] = useState(false);
+
+  const handleQuantityChange = (productId, type) => {
+    const updatedItems = cartItems.map((item) => {
+      if (item.product.id === productId) {
+        const newQty =
+          type === "inc"
+            ? item.quantity + 1
+            : item.quantity > 1
+            ? item.quantity - 1
+            : 1;
+        return { ...item, quantity: newQty };
+      }
+      return item;
+    });
+    setCartItems(updatedItems);
+    localStorage.setItem("cartItems", JSON.stringify(updatedItems));
+  };
+
+  const handleDelete = (productId) => {
+    const updatedItems = cartItems.filter(
+      (item) => item.product.id !== productId
+    );
+    setCartItems(updatedItems);
+    localStorage.setItem("cartItems", JSON.stringify(updatedItems));
+  };
+
+  const groupCartByCategory = () => {
+    const grouped = {};
+    cartItems?.forEach((item) => {
+      const categoryId = item?.product?.category_id;
+      if (!grouped[categoryId]) {
+        grouped[categoryId] = {
+          category: categories.find((cat) => cat.id === categoryId),
+          items: [],
+        };
+      }
+      grouped[categoryId].items.push(item);
+    });
+    return Object.values(grouped);
+  };
+
+  const subtotal = cartItems.reduce((acc, item) => {
+    const price = parseFloat(
+      item?.product?.product_detail?.discount_price ??
+        item?.product?.product_detail?.regular_price ??
+        0
+    );
+    return acc + price * (item?.quantity ?? 1);
+  }, 0);
+
+  const handleCheckout = () => {
+    if (!agreed) {
+      toast.error("Please agree to the terms and conditions");
+      return;
+    }
+    localStorage.setItem("checkout_items", JSON.stringify(cartItems));
+    toast.success("Checkout successful! Items stored in local storage.");
+  };
+
   return (
     <div className="custom-container py-2 sm:py-3 text-neutral-600">
       <Breadcrumb content={breadcrumbItems} />
       <div className="grid grid-cols-3 gap-10">
         {/* RIGHT SIDE */}
         <div className="border col-span-3 md:col-span-2 p-5 rounded-lg bg-white shadow">
-          {/* CARD HEADER */}
           <div className="flex items-center justify-between">
             <h1 className="font-semibold text-lg md:text-[32px]">
-              My Cart (3)
+              My Cart ({cartItems.length})
             </h1>
             <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2 ">
+              <div className="flex items-center gap-2">
                 <Checkbox id="select_all" />
                 <label
                   htmlFor="select_all"
@@ -36,141 +95,40 @@ const MyCart = () => {
                   Select all
                 </label>
               </div>
-              <p className="cursor-pointer hover:text-neutral-800">Clear all</p>
+              <p
+                className="cursor-pointer hover:text-neutral-800"
+                onClick={() => {
+                  setCartItems([]);
+                  localStorage.removeItem("cartItems");
+                }}
+              >
+                Clear all
+              </p>
             </div>
           </div>
           <div className="w-full h-[1px]"></div>
-          {/* CART ITEMS - show items by map throw the categories */}
+
           <div className="mt-5 flex flex-col gap-5">
-            <div className="flex items-center gap-4 bg-[#f1f5f9] px-3 py-2 -mr-5">
-              <p className="mt-1">
-                <Checkbox id="item1" />
-              </p>
-              <p className="flex items-center gap-3">
-                <Store strokeWidth={1.5} className="size-5" />
-                <span className="mt-1">BD FASHION HOUSE</span>
-                <ChevronRight strokeWidth={1.5} className="size-5" />
-              </p>
-            </div>
-            {/* Cart Item */}
-            <div className="flex gap-5">
-              {/* Checkbox */}
-              <div>
-                <Checkbox id="item2" />
-              </div>
-              {/* Product Details */}
-              <div className="flex flex-col gap-3 md:flex-row w-full">
-                <div className="flex gap-3 flex-grow">
-                  <Image
-                    src="/sample.jpg"
-                    alt="Product Image"
-                    width={420}
-                    height={420}
-                    className="rounded-md w-24 h-24 object-cover"
-                  />
-                  <div>
-                    <h2 className="font-medium text-neutral-800">
-                      Bestway Brand Air Inflatable 5 In 1 semi Double Sofa{" "}
-                    </h2>
-                    <p>Color: red; Size: M</p>
-                    <div className="md:flex items-center gap-10 hidden ">
-                      <div className="rounded-full border flex items-center gap-5 w-fit p-1">
-                        <Button
-                          variant="icon"
-                          className="rounded-full bg-neutral-100 p-2.5"
-                        >
-                          <Minus />
-                        </Button>
-                        <span className="text-neutral-800 font-bold">1</span>
-                        <Button
-                          variant="icon"
-                          className="rounded-full bg-neutral-100 p-2.5"
-                        >
-                          <Plus />
-                        </Button>
-                      </div>
-                      <div>
-                        <Trash2 className="text-neutral-600 cursor-pointer" />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                {/* Only mobile view */}
-                <div className="flex md:hidden items-center gap-10">
-                  <div className="border rounded-full flex items-center gap-5 w-fit p-1">
-                    <Button
-                      variant="icon"
-                      className="rounded-full bg-neutral-100 p-2.5"
-                    >
-                      <Minus />
-                    </Button>
-                    <span className="text-neutral-800 font-bold">1</span>
-                    <Button
-                      variant="icon"
-                      className="rounded-full bg-neutral-100 p-2.5"
-                    >
-                      <Plus />
-                    </Button>
-                  </div>
-                  <div>
-                    <Trash2 className="text-neutral-600 cursor-pointer" />
-                  </div>
-                </div>
-                {/* Price */}
-                <div className="flex gap-3">
-                  <p className="text-lg font-bold text-black">৳1139</p>
-                  <p className="text-[#475569] line-through">৳1139</p>
-                </div>
-              </div>
-            </div>
+            {groupCartByCategory().map(({ category, items }) => (
+              <CartCategoryGroup
+                key={category?.id}
+                category={category}
+                items={items}
+                onQuantityChange={handleQuantityChange}
+                onDelete={handleDelete}
+              />
+            ))}
           </div>
         </div>
+
         {/* LEFT SIDE */}
         <div className="col-span-3 md:col-span-1">
-          <div className=" bg-white rounded-lg p-5 shadow flex flex-col gap-5">
-            <h2 className="text-2xl font-medium">Order Summary</h2>
-            <p className="flex items-center justify-between">
-              <span className="font-medium">Price (3 items)</span>{" "}
-              <span>৳00</span>
-            </p>
-            <p className="flex items-center justify-between">
-              <span className="font-medium">Shipping Fee</span>
-              <span className="text-blue-600 text-sm">To be added</span>
-            </p>
-            <div className="flex">
-              <TextInputField
-                placeholder="Store/Falcon capone"
-                className="rounded-r-none"
-              />
-              <Button
-                className="rounded-l-none bg-emerald-500 
-             hover:bg-emerald-600 block h-full py-[11px] text-base"
-              >
-                Apply
-              </Button>
-            </div>
-            <p className="flex items-center justify-between">
-              <span className="text-lg font-medium">Sub Total</span>{" "}
-              <span className="text-xl text-black">৳00</span>
-            </p>
-            <div>
-              <Button className="bg-emerald-500 text-white hover:bg-emerald-600 w-full text-base">
-                Proceed to Checkout
-              </Button>
-            </div>
-          </div>
-          <div className="flex gap-5 mt-5">
-            <div>
-              <Checkbox id="agree" />
-            </div>
-            <label
-              htmlFor="agree"
-              className="cursor-pointer hover:text-neutral-800"
-            >
-              I have read and agree to the Terms and Conditions, Privacy Policy
-              and Refund and Return Policy
-            </label>
-          </div>
+          <CartSummary
+            subtotal={subtotal}
+            agreed={agreed}
+            onCheckout={handleCheckout}
+          />
+          <AgreementCheckbox agreed={agreed} setAgreed={setAgreed} />
         </div>
       </div>
     </div>

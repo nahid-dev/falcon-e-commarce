@@ -1,47 +1,12 @@
 import React, { useContext, useState } from "react";
 import { Card, CardContent } from "../ui/card";
 import Image from "next/image";
-import { ShoppingCart } from "lucide-react";
 import { Button } from "../ui/button";
-import { Badge } from "../ui/badge";
 import Link from "next/link";
-import toast from "react-hot-toast";
-import { ProductsContext } from "@/context";
+import { useRouter } from "next/navigation";
 
 const ProductCard = ({ product }) => {
-   const [selectedSize, setSelectedSize] = useState("XS");
-    const [selectedColor, setSelectedColor] = useState("Navy Blue");
-  const [quantity, setQuantity] = useState(1);
-  const { cartItems, setCartItems } = useContext(ProductsContext)
-
-  const handleAddToCart = (e, productId) => {
-    e.stopPropagation();
-    e.preventDefault();
-  if (typeof window === "undefined") return;
-
-  const newCartItem = {
-    id: productId,
-    color: selectedColor,
-    size: selectedSize,
-    quantity,
-  };
-  const items = JSON.parse(localStorage.getItem("cartItems")) || [];
-  const existingItemIndex = items.findIndex(
-    (item) =>
-      item.id === productId &&
-      item.color === selectedColor &&
-      item.size === selectedSize
-  );
-
-  if (existingItemIndex !== -1) {
-    items[existingItemIndex].quantity += quantity;
-    toast.success("Product quantity updated in cart!");
-  } else {
-    items.push(newCartItem);
-    toast.success("Product added to cart!");
-  }
-  setCartItems(items); 
-};
+  const router = useRouter();
   return (
     <Link href={`/product/${product?.slug}`} className="block">
       <Card className="group hover:shadow-lg transition-all duration-300 hover:-translate-y-1 h-full">
@@ -84,12 +49,13 @@ const ProductCard = ({ product }) => {
             <div className="mt-auto">
               <Button
                 type="button"
-                onClick={(e) => handleAddToCart(e, product?.id)}
+                onClick={(e) => {
+                  e.preventDefault();
+                  router.push(`/product/${product?.slug}`);
+                }}
                 className="w-full bg-teal-600 hover:bg-teal-700"
-                disabled={!product.available_stock}
               >
-                <ShoppingCart className="h-4 w-4 mr-2" />
-                {product?.available_stock ? "Add to Cart" : "Out of Stock"}
+                View Details
               </Button>
             </div>
           </div>
