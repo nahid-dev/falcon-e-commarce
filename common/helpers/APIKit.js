@@ -3,15 +3,15 @@ const { client } = require("./HTTPKit");
 const APIKit = {
   public: {
     getProducts: () => {
-      const url = "/api/v1/shop/products";
+      const url = "/shop/products";
       return client.get(url);
     },
     getProductDetails: (slug) => {
-      const url = `/api/v1/product/${slug}`;
+      const url = `/product/${slug}`;
       return client.get(url);
     },
     getCategories: () => {
-      const url = "/api/v1/categories";
+      const url = "/categories";
       return client.get(url);
     },
   },
