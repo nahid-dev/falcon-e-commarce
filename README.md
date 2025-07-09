@@ -6,7 +6,7 @@ This project is a technical task submission for the **Mid-Level Front-End Develo
 
 ## 🔗 Live Demo
 
-**Deployed Link:** [https://your-deployment-link.com](https://your-deployment-link.com)  
+**Deployed Link:** [https://falcon-e-commarce.vercel.app/](https://falcon-e-commarce.vercel.app/)  
 _(Replace this with your actual deployed site URL)_
 
 ---
